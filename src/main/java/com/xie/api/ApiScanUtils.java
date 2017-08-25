@@ -35,8 +35,8 @@ public class ApiScanUtils {
 //
         String name = DescriptMethodEnum.VALUE.name();
 
-        StringBuffer stringBuffer = Class2JsonUtils.generateApiJsonForm(bean.class,Descript.class);
-        System.out.println(stringBuffer);
+//        StringBuffer stringBuffer = Class2JsonUtils.generateApiJsonForm(bean.class,Descript.class);
+//        System.out.println(stringBuffer);
 
 
 //        Annotation annotation = SimpleUser.class.getAnnotation(annotationClz);
@@ -60,10 +60,10 @@ public class ApiScanUtils {
 
     public static void scanPagkageArr(String packageName, Class<?>[] controllerClzs, Class annoClz) throws InstantiationException, IllegalAccessException, NoSuchMethodException, InvocationTargetException {
         annotationClz = annoClz;
+        loadMappingResolers();
+        loadParamterSupports();
         List<ControllerInfo> controllerInfos = new ArrayList<>();
         List<Class<?>> classes = ClassScanUtil.getClasses(packageName);
-        loadMappingResolers(classes);
-        loadParamterSupports(classes);
         ResolverSupport support = new ResolverSupport(mappingResolverMap,annoClz);
         if (controllerClzs != null && controllerClzs.length > 0) {
             for (Class clz : controllerClzs) {
@@ -90,7 +90,9 @@ public class ApiScanUtils {
     }
 
 
-    private static void loadMappingResolers(List<Class<?>> classes) throws IllegalAccessException, InstantiationException {
+    private static void loadMappingResolers() throws IllegalAccessException, InstantiationException {
+
+        List<Class<?>> classes = ClassScanUtil.getClasses("com.xie.api");
         for (Class clz : classes) {
             Class[] interfaces = clz.getInterfaces();
             if (interfaces != null && interfaces.length > 0) {
@@ -104,7 +106,8 @@ public class ApiScanUtils {
 
     }
 
-    private static void loadParamterSupports(List<Class<?>> classes) throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+    private static void loadParamterSupports() throws IllegalAccessException, InstantiationException, NoSuchMethodException, InvocationTargetException {
+        List<Class<?>> classes = ClassScanUtil.getClasses("com.xie.api");
         for (Class clz : classes) {
             Class[] interfaces = clz.getInterfaces();
             if (interfaces != null && interfaces.length > 0) {

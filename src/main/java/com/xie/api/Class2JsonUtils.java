@@ -14,9 +14,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import static com.xie.api.ClassHelper.*;
-import static com.xie.api.constant.DescriptMethodEnum.MESSAGE;
-import static com.xie.api.constant.DescriptMethodEnum.REQUIRED;
-import static com.xie.api.constant.DescriptMethodEnum.VALUE;
+import static com.xie.api.constant.DescriptMethodEnum.*;
 
 
 /**
@@ -192,8 +190,15 @@ public class Class2JsonUtils {
             }
             int c = 0;
             for (Field field : fields) {
-                c++;
                 field.setAccessible(true);
+                Annotation fieldAnno = field.getAnnotation(annotationClz);
+                if(fieldAnno != null){
+                    boolean hide = (boolean) getAnnotationMethodReturn(fieldAnno, HIDE);
+                    if(hide){
+                        continue;
+                    }
+                }
+                c++;
                 String name = field.getName();
                 Class<?> type = field.getType();
                 for (int i = 0; i < loop; i++) {
@@ -323,7 +328,7 @@ public class Class2JsonUtils {
             boolean require = (boolean) getAnnotationMethodReturn(annotation, REQUIRED);
             sb.append(" 必选(" + (require ? "是)" : "否)"));
         } else {
-            sb.append(" 必选(未知)");
+            sb.append(" 必选(否)");
         }
         return sb;
 
@@ -390,7 +395,7 @@ public class Class2JsonUtils {
             boolean require = (boolean) getAnnotationMethodReturn(annotation, REQUIRED);
             sb.append("|").append(name).append("|" + (require ? "是" : "否"));
         } else {
-            sb.append("|").append(name).append("| 未知");
+            sb.append("|").append(name).append("| 否");
         }
         sb.append("|").append(type.getSimpleName().toLowerCase());
         if (annotation != null) {
