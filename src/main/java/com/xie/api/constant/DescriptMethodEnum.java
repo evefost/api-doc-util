@@ -1,13 +1,13 @@
 package com.xie.api.constant;
 
 /**
- * Created by xieyang on 17/3/5.
+ * 接口描述注解定所需定义的方法
  */
 public enum DescriptMethodEnum {
 
     VALUE("value", "描述默认值"),
     MESSAGE("message", "描述"),
-    HIDE("hide", "是否隐藏该字段"),
+    HIDE("hide", "是否隐藏该字段，不生成接口文档参数"),
     REQUIRED("required", "是否为必须");
 
     private String methodName;
